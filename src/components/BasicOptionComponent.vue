@@ -13,7 +13,7 @@
   const selected = ref(false);
 
   // When clicked emit the appropriate event
-  function handleClick() {
+  function onClick() {
     // Get the event and emit it
     const event = selected.value ? 'deselected' : 'selected';
     emit(event, { key: props.id })  
@@ -24,5 +24,5 @@
 </script>
 
 <template>
-  <button @click=handleClick :title="props.description">{{label}}</button> 
+  <button @click=onClick :title="props.description">{{label}}</button> 
 </template>

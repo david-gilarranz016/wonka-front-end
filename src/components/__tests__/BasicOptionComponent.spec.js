@@ -4,13 +4,15 @@ import { mount } from '@vue/test-utils'
 import BasicOptionComponent from '../BasicOptionComponent.vue'
 
 describe('BasicOptionComponent', () => {
+  // Props for the component
+  const props = {
+    label: 'Test',
+    id: 'test',
+    description: 'Test description'    
+  };
+
   it('Displays the label', () => {
     // Render the Component
-    const props = {
-      label: 'Test',
-      id: 'test',
-      description: 'Test description'    
-    };
     const wrapper = mount(BasicOptionComponent, { props });
 
     // Expect it to contain the title
@@ -19,11 +21,6 @@ describe('BasicOptionComponent', () => {
 
   it('Displays description when hovered', () => {
     // Render the Component
-    const props = {
-      label: 'Test',
-      id: 'test',
-      description: 'Test description'    
-    };
     const wrapper = mount(BasicOptionComponent, { props });
 
     // Expect the button to have title attribute set
@@ -32,11 +29,6 @@ describe('BasicOptionComponent', () => {
 
   it('Emits a "selected" envent when selected', () => {
     // Render the Component
-    const props = {
-      label: 'Test',
-      id: 'test',
-      description: 'Test description'
-    };
     const wrapper = mount(BasicOptionComponent, { props });
 
     // Find and click on the button
@@ -48,11 +40,6 @@ describe('BasicOptionComponent', () => {
 
   it('Passes its id as an argument when emitting the "selected" envent', () => {
     // Render the Component
-    const props = {
-      label: 'Test',
-      id: 'test',
-      description: 'Test description'    
-    };
     const wrapper = mount(BasicOptionComponent, { props });
 
     // Find and click on the button
@@ -68,11 +55,6 @@ describe('BasicOptionComponent', () => {
 
   it('Emits a "deselected" envent when clicked twice', () => {
     // Render the Component
-    const props = {
-      label: 'Test',
-      id: 'test',
-      description: 'Test description'    
-    };
     const wrapper = mount(BasicOptionComponent, { props });
 
     // Find and click on the button twice
@@ -85,11 +67,6 @@ describe('BasicOptionComponent', () => {
 
   it('Passes its id as an argument when emitting the "deselected" envent', () => {
     // Render the Component
-    const props = {
-      label: 'Test',
-      id: 'test',
-      description: 'Test description'    
-    };
     const wrapper = mount(BasicOptionComponent, { props });
 
     // Find and click on the button twice
