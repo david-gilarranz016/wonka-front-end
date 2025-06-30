@@ -8,12 +8,48 @@ describe('BasicOptionComponent', () => {
     // Render the Component
     const props = {
       label: 'Test',
-      key: 'test',
+      id: 'test',
       description: 'Test description'    
     }
     const wrapper = mount(BasicOptionComponent, { props });
 
     // Expect it to contain the title
     expect(wrapper.text()).toContain(props.label);
+  });
+
+  it('Emits a "selected" envent when selected', () => {
+    // Render the Component
+    const props = {
+      label: 'Test',
+      id: 'test',
+      description: 'Test description'    
+    }
+    const wrapper = mount(BasicOptionComponent, { props });
+
+    // Find and click on the button
+    wrapper.find('button').trigger('click')
+
+    // Expect the event to be emitted
+    expect(wrapper.emitted()).toHaveProperty('selected')
+  });
+
+  it('Passes its id as an argument when emitting the "selected" envent', () => {
+    // Render the Component
+    const props = {
+      label: 'Test',
+      id: 'test',
+      description: 'Test description'    
+    }
+    const wrapper = mount(BasicOptionComponent, { props });
+
+    // Find and click on the button
+    wrapper.find('button').trigger('click')
+
+    // Expect the event to be emitted with its key
+    expect(wrapper.emitted('selected')[0]).toEqual([
+      {
+        key: props.id
+      }
+    ])
   });
 });
