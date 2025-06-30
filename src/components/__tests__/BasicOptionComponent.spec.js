@@ -8,7 +8,8 @@ describe('BasicOptionComponent', () => {
   const props = {
     label: 'Test',
     id: 'test',
-    description: 'Test description'    
+    description: 'Test description',
+    selected: false
   };
 
   it('Displays the label', () => {
@@ -27,8 +28,9 @@ describe('BasicOptionComponent', () => {
     expect(wrapper.find('button').attributes('title')).toEqual(props.description);
   });
 
-  it('Emits a "selected" envent when selected', () => {
+  it('Emits a "selected" event when clicked if it was not already selected', () => {
     // Render the Component
+    props.selected = false;
     const wrapper = mount(BasicOptionComponent, { props });
 
     // Find and click on the button
@@ -40,6 +42,7 @@ describe('BasicOptionComponent', () => {
 
   it('Passes its id as an argument when emitting the "selected" envent', () => {
     // Render the Component
+    props.selected = false;
     const wrapper = mount(BasicOptionComponent, { props });
 
     // Find and click on the button
@@ -53,12 +56,12 @@ describe('BasicOptionComponent', () => {
     ])
   });
 
-  it('Emits a "deselected" envent when clicked twice', () => {
+  it('Emits a "deselected" when clicked if it was selected', () => {
     // Render the Component
+    props.selected = true;
     const wrapper = mount(BasicOptionComponent, { props });
 
-    // Find and click on the button twice
-    wrapper.find('button').trigger('click')
+    // Find and click on the button
     wrapper.find('button').trigger('click')
 
     // Expect the event to be emitted
@@ -67,10 +70,10 @@ describe('BasicOptionComponent', () => {
 
   it('Passes its id as an argument when emitting the "deselected" envent', () => {
     // Render the Component
+    props.selected = true;
     const wrapper = mount(BasicOptionComponent, { props });
 
-    // Find and click on the button twice
-    wrapper.find('button').trigger('click')
+    // Find and click on the button
     wrapper.find('button').trigger('click')
 
     // Expect the event to be emitted with its key

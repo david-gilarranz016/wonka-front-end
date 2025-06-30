@@ -5,7 +5,8 @@
   const props = defineProps({
     label: String,
     description: String,
-    id: String
+    id: String,
+    selected: Boolean
   });
   const emit = defineEmits(['selected', 'deselected']);
 
@@ -15,11 +16,8 @@
   // When clicked emit the appropriate event
   function onClick() {
     // Get the event and emit it
-    const event = selected.value ? 'deselected' : 'selected';
+    const event = props.selected ? 'deselected' : 'selected';
     emit(event, { key: props.id })  
-
-    // Toggle the value of selected
-    selected.value = !selected.value
   };
 </script>
 
