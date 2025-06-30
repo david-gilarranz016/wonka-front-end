@@ -52,4 +52,42 @@ describe('BasicOptionComponent', () => {
       }
     ])
   });
+
+  it('Emits a "deselected" envent when clicked twice', () => {
+    // Render the Component
+    const props = {
+      label: 'Test',
+      id: 'test',
+      description: 'Test description'    
+    }
+    const wrapper = mount(BasicOptionComponent, { props });
+
+    // Find and click on the button twice
+    wrapper.find('button').trigger('click')
+    wrapper.find('button').trigger('click')
+
+    // Expect the event to be emitted
+    expect(wrapper.emitted()).toHaveProperty('deselected')
+  });
+
+  it('Passes its id as an argument when emitting the "deselected" envent', () => {
+    // Render the Component
+    const props = {
+      label: 'Test',
+      id: 'test',
+      description: 'Test description'    
+    }
+    const wrapper = mount(BasicOptionComponent, { props });
+
+    // Find and click on the button twice
+    wrapper.find('button').trigger('click')
+    wrapper.find('button').trigger('click')
+
+    // Expect the event to be emitted with its key
+    expect(wrapper.emitted('deselected')[0]).toEqual([
+      {
+        key: props.id
+      }
+    ])
+  });
 });
