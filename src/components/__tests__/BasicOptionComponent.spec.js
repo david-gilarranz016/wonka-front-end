@@ -10,11 +10,24 @@ describe('BasicOptionComponent', () => {
       label: 'Test',
       id: 'test',
       description: 'Test description'    
-    }
+    };
     const wrapper = mount(BasicOptionComponent, { props });
 
     // Expect it to contain the title
     expect(wrapper.text()).toContain(props.label);
+  });
+
+  it('Displays description when hovered', () => {
+    // Render the Component
+    const props = {
+      label: 'Test',
+      id: 'test',
+      description: 'Test description'    
+    };
+    const wrapper = mount(BasicOptionComponent, { props });
+
+    // Expect the button to have title attribute set
+    expect(wrapper.find('button').attributes('title')).toEqual(props.description);
   });
 
   it('Emits a "selected" envent when selected', () => {
@@ -22,8 +35,8 @@ describe('BasicOptionComponent', () => {
     const props = {
       label: 'Test',
       id: 'test',
-      description: 'Test description'    
-    }
+      description: 'Test description'
+    };
     const wrapper = mount(BasicOptionComponent, { props });
 
     // Find and click on the button
@@ -39,7 +52,7 @@ describe('BasicOptionComponent', () => {
       label: 'Test',
       id: 'test',
       description: 'Test description'    
-    }
+    };
     const wrapper = mount(BasicOptionComponent, { props });
 
     // Find and click on the button
@@ -59,7 +72,7 @@ describe('BasicOptionComponent', () => {
       label: 'Test',
       id: 'test',
       description: 'Test description'    
-    }
+    };
     const wrapper = mount(BasicOptionComponent, { props });
 
     // Find and click on the button twice
@@ -76,7 +89,7 @@ describe('BasicOptionComponent', () => {
       label: 'Test',
       id: 'test',
       description: 'Test description'    
-    }
+    };
     const wrapper = mount(BasicOptionComponent, { props });
 
     // Find and click on the button twice

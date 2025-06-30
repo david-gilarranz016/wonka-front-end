@@ -24,5 +24,5 @@
 </script>
 
 <template>
-  <button @click=handleClick>{{label}}</button> 
+  <button @click=handleClick :title="props.description">{{label}}</button> 
 </template>
