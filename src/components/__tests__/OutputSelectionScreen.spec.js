@@ -166,4 +166,27 @@ describe('OutputSelectionScreen', () => {
     // Expect the BasicOption format to be selected
     expect(option.props('selected')).toBe(false);
   });
+
+  it('Sets the output option as true when receives a selected event', async () => {
+    const wrapper = mount(OutputSelectionScreen);
+
+    // Select one output format
+    const option = wrapper.findAllComponents(OptionGroup)[1].findAllComponents(BasicOptionComponent)[0];
+    option.find('button').trigger('click');
+    await nextTick();
+
+    // Expect the GenerationRequest to contain the output option as true
+    expect(GenerationRequest.request.output[option.props('id')]).toBe(true);
+  });
+
+  it('Sets the output option as selected when receives a selected event', async () => {
+    const wrapper = mount(OutputSelectionScreen);
+
+    // Select one output format
+    const option = wrapper.findAllComponents(OptionGroup)[1].findAllComponents(BasicOptionComponent)[0];
+    option.find('button').trigger('click');
+
+    // Expect the BasicOption format to be selected
+    expect(option.props('selected')).toBe(true);
+  });
 });

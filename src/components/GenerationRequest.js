@@ -39,5 +39,8 @@ export const GenerationRequest = reactive({
   },
   setOutputFormat(format) {
     this.request.output.format = format;
+  },
+  setOutputOption(option, value) {
+    this.request.output[option] = value
   }
 });
