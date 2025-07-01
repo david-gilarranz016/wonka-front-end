@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
+import { nextTick } from 'vue';
 import axios from 'axios';
 
 import FeatureSelectionScreen from '../FeatureSelectionScreen.vue';
@@ -7,7 +8,7 @@ import OptionGroup from '../OptionGroup.vue';
 import BasicOptionComponent from '../BasicOptionComponent.vue';
 import InputOptionComponent from '../InputOptionComponent.vue';
 import { GenerationRequest } from '../GenerationRequest.js';
-import { nextTick } from 'vue';
+import { APIResponse } from '../APIResponse.js';
 
 // Response to feature requests
 const mockedFeatures = [
@@ -75,6 +76,14 @@ describe('FeatureSelectionScreen', () => {
     // Expect the API to have been called with the appropriate technology
     expect(axios.get).toHaveBeenCalledTimes(1);
     expect(axios.get).toHaveBeenCalledWith(`${process.env.VUE_APP_API_BASE}/web-shell/${GenerationRequest.request.shell}`);
+  });
+
+  it('Stores the response in the APIResponse object', async () => {
+    // Setup the test
+    await mockAxiosAndCreateWrapper();
+
+    // Expect the API response to have been stored in the APIResponse storage
+    expect(APIResponse.features).toEqual(mockedFeatures);
   });
 
   it('Creates an OptionGroup for the normal features', async () => {

@@ -5,14 +5,15 @@
   import BasicOptionComponent from './BasicOptionComponent.vue';
   import InputOptionComponent from './InputOptionComponent.vue';
   import { GenerationRequest } from './GenerationRequest.js';
+  import { APIResponse } from './APIResponse.js';
 
   // State variables
   const unfilteredFeatures = ref([]);
 
   // Computed properties to distinguish between basic and non input-based protections
-  const features = computed(() => unfilteredFeatures.value.filter(f => f.type === 'feature'));
-  const basicProtections = computed(() => unfilteredFeatures.value.filter(p => p.type === 'security' && p.input === undefined));
-  const inputProtections = computed(() => unfilteredFeatures.value.filter(p => p.type === 'security' && p.input !== undefined));
+  const features = computed(() => APIResponse.features.filter(f => f.type === 'feature'));
+  const basicProtections = computed(() => APIResponse.features.filter(p => p.type === 'security' && p.input === undefined));
+  const inputProtections = computed(() => APIResponse.features.filter(p => p.type === 'security' && p.input !== undefined));
 
   // When mounted, request the selected technology's features
   onMounted(async () => {
@@ -21,7 +22,7 @@
     response.forEach(f => f.selected = false);
 
     // Initialize the features and protection arrays
-    unfilteredFeatures.value = response;
+    APIResponse.features = response;
   });
 
   // Handler for feature and protection selection events
@@ -57,7 +58,7 @@
 
   // Helper functions
   const setSelected = (feature, value) => {
-    unfilteredFeatures.value.forEach(f => {
+    APIResponse.features.forEach(f => {
       if(f.key === feature.key) {
         f.selected = value;
       }
