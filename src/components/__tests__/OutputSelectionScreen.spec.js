@@ -44,8 +44,11 @@ describe('OutputSelectionScreen', () => {
   });
 
   afterEach(() => {
-    // Reset the API response object
+    // Reset the Global Objects
     APIResponse.features = [];
+    GenerationRequest.request.output = {
+      format: ''
+    };
   });
 
   it('Creates an output group for format-related options', () => {
@@ -130,5 +133,37 @@ describe('OutputSelectionScreen', () => {
 
     // Expect the first format to be unselected
     expect(firstOption.props('selected')).toBe(false);
+  });
+
+  it('Resets the output format when a deselect event is received', async () => {
+    const wrapper = mount(OutputSelectionScreen);
+
+    // Select one output format and click it twice to deselect it
+    const option = wrapper.findAllComponents(OptionGroup)[0].findAllComponents(BasicOptionComponent)[0];
+
+    option.find('button').trigger('click');
+    await nextTick();
+
+    option.find('button').trigger('click');
+    await nextTick();
+
+    // Expect the GenerationRequest to contain the format
+    expect(GenerationRequest.request.output.format).toEqual('');
+  });
+
+  it('Sets the option as deselected when receives a deselected event', async () => {
+    const wrapper = mount(OutputSelectionScreen);
+
+    // Select one output format and click it twice to deselect it
+    const option = wrapper.findAllComponents(OptionGroup)[0].findAllComponents(BasicOptionComponent)[0];
+
+    option.find('button').trigger('click');
+    await nextTick();
+
+    option.find('button').trigger('click');
+    await nextTick();
+
+    // Expect the BasicOption format to be selected
+    expect(option.props('selected')).toBe(false);
   });
 });

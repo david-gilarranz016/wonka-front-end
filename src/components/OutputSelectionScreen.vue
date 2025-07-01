@@ -31,6 +31,18 @@
       }
     });
   };
+
+  const onFormatDeselected = (format) => {
+    // Reset the output format
+    GenerationRequest.setOutputFormat('');
+
+    // Unselect the component
+    formats.value.forEach(f => {
+      if (f.key === format.key) {
+        f.selected = false;
+      }
+    });
+  };
 </script>
 
 <template>
@@ -43,6 +55,7 @@
                             :description="f.description"
                             :selected="f.selected"
                             @selected="onFormatSelected"
+                            @deselected="onFormatDeselected"
       />
     </OptionGroup>
     <OptionGroup title="Additional Options">
