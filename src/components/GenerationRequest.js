@@ -16,5 +16,15 @@ export const GenerationRequest = reactive({
   },
   addFeature(feature) {
     this.request.features.push(feature);
+  },
+  hasFeature(feature) {
+    return this.request.features.filter(f => f.key === feature.key).length === 1;
+  },
+  updateFeature(feature) {
+    this.request.features.forEach((f, index) => {
+      if (f.key === feature.key) {
+        this.request.features[index] = feature;
+      }
+    });
   }
 });

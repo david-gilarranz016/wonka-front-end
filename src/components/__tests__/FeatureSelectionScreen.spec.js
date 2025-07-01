@@ -202,6 +202,65 @@ describe('FeatureSelectionScreen', () => {
     // Expect the triggering option to be selected
     expect(option.props('selected')).toBe(true);
   });
+
+  it('Adds selected input protections to the GenerationRequest', async () => {
+    const wrapper = await mockAxiosAndCreateWrapper();
+
+    // Modify the input value
+    const option = wrapper.findAllComponents(OptionGroup)[1].findAllComponents(InputOptionComponent)[0];
+    option.find('input').setValue('Test');
+    await nextTick();
+
+    // Expect the GenerationRequest to have been updated
+    expect(GenerationRequest.request.features).toContainEqual({
+      key: option.props('id'),
+      arguments: [
+        {
+          name: option.props('argumentName'),
+          value: 'Test'
+        }
+      ]
+    });
+  });
+
+  it('Modifies selected protections from GenerationRequest when input changes', async () => {
+    const wrapper = await mockAxiosAndCreateWrapper();
+
+    // Modify the input value twice
+    const option = wrapper.findAllComponents(OptionGroup)[1].findAllComponents(InputOptionComponent)[0];
+
+    option.find('input').setValue('Test');
+    await nextTick();
+
+    option.find('input').setValue('Test Value');
+    await nextTick();
+
+    // Expect the GenerationRequest to only contain one instance of the feature with its updated value
+    expect(GenerationRequest.request.features.filter(f => f.key === option.props('id')).length).toBe(1);
+    expect(GenerationRequest.request.features).toContainEqual({
+      key: option.props('id'),
+      arguments: [
+        {
+          name: option.props('argumentName'),
+          value: 'Test Value'
+        }
+      ]
+    });
+  });
+
+  it('Sets the protection InputOption as selected when the selected event is received', async () => {
+    const wrapper = await mockAxiosAndCreateWrapper();
+
+    // Modify the option
+    const option = wrapper.findAllComponents(OptionGroup)[1].findAllComponents(InputOptionComponent)[0];
+    option.find('input').setValue('Test');
+
+    // Wait for the DOM to update
+    await nextTick();
+
+    // Expect the triggering option to be selected
+    expect(option.props('selected')).toBe(true);
+  });
 });
 
 async function mockAxiosAndCreateWrapper() {

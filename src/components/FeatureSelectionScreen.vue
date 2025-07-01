@@ -30,6 +30,24 @@
     GenerationRequest.addFeature(feature);
 
     // Set the feature as selected
+    setSelected(feature);
+  };
+
+  // Handler for input selection events
+  const onInputFeatureSelected = (feature) => {
+    // Check if the feature has been added
+    if(GenerationRequest.hasFeature(feature)) {
+      GenerationRequest.updateFeature(feature);
+    } else {
+      GenerationRequest.addFeature(feature)
+    }
+
+    // Set the feature as selected
+    setSelected(feature);
+  }
+
+  // Helper functions
+  const setSelected = (feature) => {
     unfilteredFeatures.value.forEach(f => {
       if(f.key === feature.key) {
         f.selected = true;
@@ -67,6 +85,7 @@
                             :placeholder="p.input.placeholder"
                             :argument-name="p.input.key"
                             :selected="p.selected"
+                            @selected="onInputFeatureSelected"
       />
     </OptionGroup>
   </div>
