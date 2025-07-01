@@ -17,7 +17,7 @@
   // When mounted, request the selected technology's features
   onMounted(async () => {
     // Request the features
-    const response = await axios.get(`${process.env.VUE_APP_API_BASE}/web-shell/${$route.params.technology}`);
+    const response = await axios.get(`${process.env.VUE_APP_API_BASE}/web-shell/${GenerationRequest.getShellTechnology()}`);
     response.forEach(f => f.selected = false);
 
     // Initialize the features and protection arrays

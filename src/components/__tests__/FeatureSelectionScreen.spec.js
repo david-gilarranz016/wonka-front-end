@@ -9,13 +9,6 @@ import InputOptionComponent from '../InputOptionComponent.vue';
 import { GenerationRequest } from '../GenerationRequest.js';
 import { nextTick } from 'vue';
 
-// Mocked route
-let mockRoute = {
-  params: {
-    technology: 'php'
-  }
-};
-
 // Response to feature requests
 const mockedFeatures = [
   {
@@ -47,24 +40,20 @@ const mockedFeatures = [
       placeholder: '10.128.20.1, ::1',
       label: 'Allowed IPs'
     } 
-  },
+  }
 ];
 
 describe('FeatureSelectionScreen', () => {
-  // Before each test, mock the global object to include the $route
   beforeEach(() => {
-    vi.stubGlobal('$route', mockRoute);
+    // Before each test, ensure a web shell technology is selected 
+    GenerationRequest.setShellTechnology('php');
+
+    // vi.stubGlobal('$route', mockRoute);
   });
 
   afterEach(() => {
-    // Reset the mock route to it's original state after each test
-    mockRoute = {
-      params: {
-        technology: 'php'
-      }
-    };
-
     // Reset the generation request
+    GenerationRequest.setShellTechnology('');
     GenerationRequest.request.features = [];
   });
 
@@ -73,19 +62,19 @@ describe('FeatureSelectionScreen', () => {
 
     // Expect the API to have been called with the appropriate technology
     expect(axios.get).toHaveBeenCalledTimes(1);
-    expect(axios.get).toHaveBeenCalledWith(`${process.env.VUE_APP_API_BASE}/web-shell/${mockRoute.params.technology}`);
+    expect(axios.get).toHaveBeenCalledWith(`${process.env.VUE_APP_API_BASE}/web-shell/${GenerationRequest.request.shell}`);
   });
 
   it("Requests a different selected technology's features to the backend", async () => {
     // Modify the path param to a different technology
-    mockRoute.params.technology = 'asp'
+    GenerationRequest.setShellTechnology('asp');
 
     // Setup the test
     await mockAxiosAndCreateWrapper();
 
     // Expect the API to have been called with the appropriate technology
     expect(axios.get).toHaveBeenCalledTimes(1);
-    expect(axios.get).toHaveBeenCalledWith(`${process.env.VUE_APP_API_BASE}/web-shell/${mockRoute.params.technology}`);
+    expect(axios.get).toHaveBeenCalledWith(`${process.env.VUE_APP_API_BASE}/web-shell/${GenerationRequest.request.shell}`);
   });
 
   it('Creates an OptionGroup for the normal features', async () => {

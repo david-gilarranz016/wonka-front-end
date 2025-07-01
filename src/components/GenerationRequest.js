@@ -30,5 +30,8 @@ export const GenerationRequest = reactive({
   removeFeature(feature) {
     const index = this.request.features.findIndex(f => f.key === feature.key)
     this.request.features.splice(index, 1);
+  },
+  getShellTechnology() {
+    return this.request.shell;
   }
 });
