@@ -74,7 +74,6 @@ describe('ShellSelectionScreen', () => {
     expect(option.props('selected')).toBe(true);
   });
 
-
   it('Unselects all other BasicOptionComponent when a different one is clicked', async () => {
     const wrapper = await mockAxiosAndCreateWrapper();
 
@@ -89,6 +88,38 @@ describe('ShellSelectionScreen', () => {
 
     // Expect the first option to be unselected
     expect(firstOption.props('selected')).toBe(false);
+  });
+
+  it('Unsets the GenerationRequest shell technology when the selected option is deselected', async () => {
+    const wrapper = await mockAxiosAndCreateWrapper();
+
+    // Click on the first option twice to deselect it
+    const option = wrapper.findAllComponents(BasicOptionComponent)[0];
+
+    option.find('button').trigger('click');
+    await nextTick();
+
+    option.find('button').trigger('click');
+    await nextTick();
+
+    // Expect the GenerationRequest to have been updated
+    expect(GenerationRequest.request.shell).toEqual('');
+  });
+
+  it('Sets the BasicOptionComponent as deselected when clicked twice', async () => {
+    const wrapper = await mockAxiosAndCreateWrapper();
+
+    // Click on the first option twice to deselect it
+    const option = wrapper.findAllComponents(BasicOptionComponent)[0];
+
+    option.find('button').trigger('click');
+    await nextTick();
+
+    option.find('button').trigger('click');
+    await nextTick();
+
+    // Expect the triggering option to be deselected
+    expect(option.props('selected')).toBe(false);
   });
 });
 

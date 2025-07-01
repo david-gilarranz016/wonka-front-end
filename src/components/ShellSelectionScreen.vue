@@ -35,6 +35,19 @@
       }
     });
   };
+
+  // Handler for deselection events
+  const onTechnologyDeselected = (e) => {
+    // Update the generation request
+    GenerationRequest.setShellTechnology('');
+
+    // Set the option as unselected
+    technologies.value.forEach((t) => {
+      if (t.technology === e.key) {
+        t.selected = false;
+      }
+    });
+  };
 </script>
 <template>
   <OptionGroup title="WebShell Technologies">
@@ -45,6 +58,7 @@
                           :description="t.technology"
                           :selected="t.selected"
                           @selected="onTechnologySelected"
+                          @deselected="onTechnologyDeselected"
     />
   </OptionGroup>
 </template>
