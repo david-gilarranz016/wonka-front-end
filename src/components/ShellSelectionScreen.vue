@@ -1,8 +1,10 @@
 <script setup>
   import axios from 'axios';
   import { ref, onMounted } from 'vue';
+
   import OptionGroup from './OptionGroup.vue';
   import BasicOptionComponent from './BasicOptionComponent.vue';
+  import { GenerationRequest } from './GenerationRequest.js';
 
   // Create a ref for the available technologies
   const technologies = ref([]);
@@ -18,6 +20,21 @@
     // Update the technologies array
     technologies.value = availableTechnologies;
   });
+
+  // Handlers for selection events
+  const onTechnologySelected = (e) => {
+    // Update the generation request
+    GenerationRequest.setShellTechnology(e.key);
+
+    // Set the option as selected and unselect all other options
+    technologies.value.forEach((t) => {
+      if (t.technology === e.key) {
+        t.selected = true;
+      } else {
+        t.selected = false;
+      }
+    });
+  };
 </script>
 <template>
   <OptionGroup title="WebShell Technologies">
@@ -27,6 +44,7 @@
                           :label="t.technology"
                           :description="t.technology"
                           :selected="t.selected"
+                          @selected="onTechnologySelected"
     />
   </OptionGroup>
 </template>

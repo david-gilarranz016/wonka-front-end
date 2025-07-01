@@ -1,31 +1,21 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
 import axios from 'axios';
 
 import ShellSelectionScreen from '../ShellSelectionScreen.vue';
 import OptionGroup from '../OptionGroup.vue';
 import BasicOptionComponent from '../BasicOptionComponent.vue';
+import { GenerationRequest } from '../GenerationRequest.js';
+import { nextTick } from 'vue';
 
 describe('ShellSelectionScreen', () => {
+  // Reset global state after each test
+  afterEach(() => {
+    GenerationRequest.setShellTechnology('');
+  });
+
   it('Requests available technologies from the backend', async () => {
-    // Mock the axios `get` method
-    const mockedTechnologies = [
-      {
-        technology: 'php',
-        url: '/web-shell/php'
-      },
-      {
-        technology: 'asp',
-        url: '/web-shell/asp'
-      }
-    ]
-    vi.spyOn(axios, 'get').mockResolvedValue(mockedTechnologies);
-
-    // Mount the component
-    const wrapper = mount(ShellSelectionScreen);
-
-    // Wait until the DOM updates
-    await flushPromises();
+    await mockAxiosAndCreateWrapper();
 
     // Expect the API to have been called
     expect(axios.get).toHaveBeenCalledTimes(1);
@@ -33,72 +23,21 @@ describe('ShellSelectionScreen', () => {
   });
 
   it('Creates an OptionGroup for the requested technologies', async () => {
-    // Mock the axios `get` method
-    const mockedTechnologies = [
-      {
-        technology: 'php',
-        url: '/web-shell/php'
-      },
-      {
-        technology: 'asp',
-        url: '/web-shell/asp'
-      }
-    ]
-    vi.spyOn(axios, 'get').mockResolvedValue(mockedTechnologies);
-
-    // Mount the component
-    const wrapper = mount(ShellSelectionScreen);
-
-    // Wait until the DOM updates
-    await flushPromises();
+    const wrapper = await mockAxiosAndCreateWrapper();
 
     // Expect an option group to have been created
     expect(wrapper.getComponent(OptionGroup).text()).toContain('WebShell Technologies');
   });
 
   it('Creates a BasicOptionComponent for each technology', async () => {
-    // Mock the axios `get` method
-    const mockedTechnologies = [
-      {
-        technology: 'php',
-        url: '/web-shell/php'
-      },
-      {
-        technology: 'asp',
-        url: '/web-shell/asp'
-      }
-    ];
-    vi.spyOn(axios, 'get').mockResolvedValue(mockedTechnologies);
-
-    // Mount the component
-    const wrapper = mount(ShellSelectionScreen);
-
-    // Wait until the DOM updates
-    await flushPromises();
+    const wrapper = await mockAxiosAndCreateWrapper();
 
     // Expect a BasicOptionComponent to have been created for each technology
     expect(wrapper.findAllComponents(BasicOptionComponent).map(c => c.text()).join()).toEqual('php,asp');
   });
 
   it('Initializes all BasicOptionComponent as Unselected', async () => {
-    // Mock the axios `get` method
-    const mockedTechnologies = [
-      {
-        technology: 'php',
-        url: '/web-shell/php'
-      },
-      {
-        technology: 'asp',
-        url: '/web-shell/asp'
-      }
-    ];
-    vi.spyOn(axios, 'get').mockResolvedValue(mockedTechnologies);
-
-    // Mount the component
-    const wrapper = mount(ShellSelectionScreen);
-
-    // Wait until the DOM updates
-    await flushPromises();
+    const wrapper = await mockAxiosAndCreateWrapper();
 
     // Click on each BasicOptionComponent once and expect them to 
     wrapper.findAllComponents(BasicOptionComponent).forEach((c) => {
@@ -109,4 +48,70 @@ describe('ShellSelectionScreen', () => {
       expect(c.props('selected')).toBe(false);
     });
   });
+
+  it('Sets the generationRequest shell technology to the selected one', async () => {
+    const wrapper = await mockAxiosAndCreateWrapper();
+
+    // Click on the first option
+    const option = wrapper.findAllComponents(BasicOptionComponent)[0];
+    option.find('button').trigger('click');
+
+    // Expect the GenerationRequest to have been updated
+    expect(GenerationRequest.request.shell).toEqual(option.props('id'));
+  });
+
+  it('Sets the BasicOptionComponent as selected when clicked', async () => {
+    const wrapper = await mockAxiosAndCreateWrapper();
+
+    // Click on the first option
+    const option = wrapper.findAllComponents(BasicOptionComponent)[0];
+    option.find('button').trigger('click');
+
+    // Wait for the DOM to update
+    await nextTick();
+
+    // Expect the triggering option to be selected
+    expect(option.props('selected')).toBe(true);
+  });
+
+
+  it('Unselects all other BasicOptionComponent when a different one is clicked', async () => {
+    const wrapper = await mockAxiosAndCreateWrapper();
+
+    // Click on the first option and wait for the DOM to update
+    const [ firstOption, secondOption] = wrapper.findAllComponents(BasicOptionComponent);
+    firstOption.find('button').trigger('click');
+    await nextTick();
+
+    // Click on the second option and wait for the DOM to update
+    secondOption.find('button').trigger('click');
+    await nextTick();
+
+    // Expect the first option to be unselected
+    expect(firstOption.props('selected')).toBe(false);
+  });
 });
+
+async function mockAxiosAndCreateWrapper() {
+  // Mock the axios `get` method
+  const mockedTechnologies = [
+    {
+      technology: 'php',
+      url: '/web-shell/php'
+    },
+    {
+      technology: 'asp',
+      url: '/web-shell/asp'
+    }
+  ];
+  vi.spyOn(axios, 'get').mockResolvedValue(mockedTechnologies);
+
+  // Mount the component
+  const wrapper = mount(ShellSelectionScreen);
+
+  // Wait until the DOM updates
+  await flushPromises();
+
+  // Return the wrapper
+  return wrapper;
+}
