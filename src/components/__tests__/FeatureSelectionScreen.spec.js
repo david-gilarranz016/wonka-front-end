@@ -5,6 +5,7 @@ import axios from 'axios';
 import FeatureSelectionScreen from '../FeatureSelectionScreen.vue';
 import OptionGroup from '../OptionGroup.vue';
 import BasicOptionComponent from '../BasicOptionComponent.vue';
+import InputOptionComponent from '../InputOptionComponent.vue';
 import { GenerationRequest } from '../GenerationRequest.js';
 import { nextTick } from 'vue';
 
@@ -109,6 +110,38 @@ describe('FeatureSelectionScreen', () => {
       // Expect the props to be correct
       expect(option.props('label')).toEqual(f.name);
       expect(option.props('description')).toEqual(f.description);
+      expect(option.props('selected')).toEqual(false);
+    });
+  });
+
+  it('Creates a BasicOption for all protections that do not require input', async () => {
+    const wrapper = await mockAxiosAndCreateWrapper();
+
+    // Verify that all features were created with a BasicOption
+    mockedFeatures.filter((f) => f.type === 'security' && f.input === undefined).forEach(p => {
+      // Find the option
+      const option = wrapper.findAllComponents(BasicOptionComponent).filter(c => c.props('id') === p.key)[0];
+
+      // Expect the props to be correct
+      expect(option.props('label')).toEqual(p.name);
+      expect(option.props('description')).toEqual(p.description);
+      expect(option.props('selected')).toEqual(false);
+    });
+  });
+
+  it('Creates an InputOption for all protections that do require input', async () => {
+    const wrapper = await mockAxiosAndCreateWrapper();
+
+    // Verify that all features were created with a BasicOption
+    mockedFeatures.filter((f) => f.type === 'security' && f.input !== undefined).forEach(p => {
+      // Find the option
+      const option = wrapper.findAllComponents(InputOptionComponent).filter(c => c.props('id') === p.key)[0];
+
+      // Expect the props to be correct
+      expect(option.props('label')).toEqual(p.name);
+      expect(option.props('description')).toEqual(p.description);
+      expect(option.props('placeholder')).toEqual(p.input.placeholder);
+      expect(option.props('argumentName')).toEqual(p.input.key);
       expect(option.props('selected')).toEqual(false);
     });
   });

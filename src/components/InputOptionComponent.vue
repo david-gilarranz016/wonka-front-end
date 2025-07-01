@@ -7,7 +7,8 @@
     description: String,
     id: String,
     placeholder: String,
-    argumentName: String
+    argumentName: String,
+    selected: Boolean
   });
   const emit = defineEmits(['selected', 'deselected']);
 
