@@ -7,12 +7,12 @@
   import { GenerationRequest } from './GenerationRequest.js';
 
   // State variables
-  const features = ref([]);
-  const protections = ref([]);
+  const unfilteredFeatures = ref([]);
 
   // Computed properties to distinguish between basic and non input-based protections
-  const basicProtections = computed(() => protections.value.filter(p => p.input === undefined));
-  const inputProtections = computed(() => protections.value.filter(p => p.input !== undefined));
+  const features = computed(() => unfilteredFeatures.value.filter(f => f.type === 'feature'));
+  const basicProtections = computed(() => unfilteredFeatures.value.filter(p => p.type === 'security' && p.input === undefined));
+  const inputProtections = computed(() => unfilteredFeatures.value.filter(p => p.type === 'security' && p.input !== undefined));
 
   // When mounted, request the selected technology's features
   onMounted(async () => {
@@ -21,8 +21,7 @@
     response.forEach(f => f.selected = false);
 
     // Initialize the features and protection arrays
-    features.value = response.filter(f => f.type === 'feature');
-    protections.value = response.filter(f => f.type === 'security');
+    unfilteredFeatures.value = response;
   });
 
   // Handler for feature and protection selection events
@@ -31,7 +30,7 @@
     GenerationRequest.addFeature(feature);
 
     // Set the feature as selected
-    features.value.forEach(f => {
+    unfilteredFeatures.value.forEach(f => {
       if(f.key === feature.key) {
         f.selected = true;
       }
@@ -58,6 +57,7 @@
                             :label="p.name"
                             :description="p.description"
                             :selected="p.selected"
+                            @selected="onBasicFeatureSelected"
       />
       <InputOptionComponent v-for="p in inputProtections"
                             :key="p.key"

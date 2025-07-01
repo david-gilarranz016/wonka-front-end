@@ -175,6 +175,33 @@ describe('FeatureSelectionScreen', () => {
     // Expect the triggering option to be selected
     expect(option.props('selected')).toBe(true);
   });
+
+  it('Adds selected basic protections to the GenerationRequest', async () => {
+    const wrapper = await mockAxiosAndCreateWrapper();
+
+    // Click on the first option
+    const option = wrapper.findAllComponents(OptionGroup)[1].findAllComponents(BasicOptionComponent)[0];
+    option.find('button').trigger('click');
+
+    // Expect the GenerationRequest to have been updated
+    expect(GenerationRequest.request.features).toContainEqual({
+      key: option.props('id')
+    });
+  });
+
+  it('Sets the protection BasicOption as selected when the selected event is received', async () => {
+    const wrapper = await mockAxiosAndCreateWrapper();
+
+    // Click on the first option
+    const option = wrapper.findAllComponents(OptionGroup)[1].findAllComponents(BasicOptionComponent)[0];
+    option.find('button').trigger('click');
+
+    // Wait for the DOM to update
+    await nextTick();
+
+    // Expect the triggering option to be selected
+    expect(option.props('selected')).toBe(true);
+  });
 });
 
 async function mockAxiosAndCreateWrapper() {
