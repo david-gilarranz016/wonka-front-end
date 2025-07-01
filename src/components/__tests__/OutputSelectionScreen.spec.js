@@ -32,7 +32,7 @@ const mockFeatures = [
   {
     key: 'obfuscate-code',
     name: 'Obfuscate code',
-    type: 'ouptut,option',
+    type: 'output,option',
     description: 'Obfuscate the generated shell'
   }
 ];
@@ -60,5 +60,35 @@ describe('OutputSelectionScreen', () => {
 
     // Expect the wrapper to contain the element
     expect(wrapper.findAllComponents(OptionGroup)[1].text()).toContain('Additional Options');
+  });
+
+  it('Creates a BasicOption for each available output format', () => {
+    const wrapper = mount(OutputSelectionScreen);
+
+    // Expect an option to be created with the appropriate props for each format
+    APIResponse.features.filter(f => f.type === 'output,format').forEach(format => {
+      const option = wrapper.findAllComponents(OptionGroup)[0]
+        .findAllComponents(BasicOptionComponent)
+        .filter(option => option.props('id') === format.key)[0];
+
+      expect(option.props('label')).toEqual(format.name);
+      expect(option.props('description')).toEqual(format.description);
+      expect(option.props('selected')).toEqual(false);
+    });
+  });
+
+  it('Creates a BasicOption for each available output option', () => {
+    const wrapper = mount(OutputSelectionScreen);
+
+    // Expect an option to be created with the appropriate props for each format
+    APIResponse.features.filter(f => f.type === 'output,option').forEach(format => {
+      const option = wrapper.findAllComponents(OptionGroup)[1]
+        .findAllComponents(BasicOptionComponent)
+        .filter(option => option.props('id') === format.key)[0];
+
+      expect(option.props('label')).toEqual(format.name);
+      expect(option.props('description')).toEqual(format.description);
+      expect(option.props('selected')).toEqual(false);
+    });
   });
 });
