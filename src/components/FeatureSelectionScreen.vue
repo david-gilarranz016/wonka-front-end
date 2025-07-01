@@ -4,6 +4,7 @@
   import OptionGroup from './OptionGroup.vue';
   import BasicOptionComponent from './BasicOptionComponent.vue';
   import InputOptionComponent from './InputOptionComponent.vue';
+  import { GenerationRequest } from './GenerationRequest.js';
 
   // State variables
   const features = ref([]);
@@ -23,6 +24,19 @@
     features.value = response.filter(f => f.type === 'feature');
     protections.value = response.filter(f => f.type === 'security');
   });
+
+  // Handler for feature and protection selection events
+  const onBasicFeatureSelected = (feature) => {
+    // Add the feature to the generation request
+    GenerationRequest.addFeature(feature);
+
+    // Set the feature as selected
+    features.value.forEach(f => {
+      if(f.key === feature.key) {
+        f.selected = true;
+      }
+    });
+  };
 </script>
 
 <template>
@@ -34,6 +48,7 @@
                             :label="f.name"
                             :description="f.description"
                             :selected="f.selected"
+                            @selected="onBasicFeatureSelected"
       />
     </OptionGroup>
     <OptionGroup title="Additional Protections">

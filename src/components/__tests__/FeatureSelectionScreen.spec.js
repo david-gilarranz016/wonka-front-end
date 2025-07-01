@@ -56,13 +56,16 @@ describe('FeatureSelectionScreen', () => {
     vi.stubGlobal('$route', mockRoute);
   });
 
-  // Reset the mock route to it's original state after each test
   afterEach(() => {
+    // Reset the mock route to it's original state after each test
     mockRoute = {
       params: {
         technology: 'php'
       }
     };
+
+    // Reset the generation request
+    GenerationRequest.request.features = [];
   });
 
   it("Requests the selected technology's features to the backend", async () => {
@@ -144,6 +147,33 @@ describe('FeatureSelectionScreen', () => {
       expect(option.props('argumentName')).toEqual(p.input.key);
       expect(option.props('selected')).toEqual(false);
     });
+  });
+
+  it('Adds selected features to the GenerationRequest', async () => {
+    const wrapper = await mockAxiosAndCreateWrapper();
+
+    // Click on the first option
+    const option = wrapper.findAllComponents(OptionGroup)[0].findAllComponents(BasicOptionComponent)[0];
+    option.find('button').trigger('click');
+
+    // Expect the GenerationRequest to have been updated
+    expect(GenerationRequest.request.features).toContainEqual({
+      key: option.props('id')
+    });
+  });
+
+  it('Sets the BasicOptionComponent as selected when the selected event is received', async () => {
+    const wrapper = await mockAxiosAndCreateWrapper();
+
+    // Click on the first option
+    const option = wrapper.findAllComponents(OptionGroup)[0].findAllComponents(BasicOptionComponent)[0];
+    option.find('button').trigger('click');
+
+    // Wait for the DOM to update
+    await nextTick();
+
+    // Expect the triggering option to be selected
+    expect(option.props('selected')).toBe(true);
   });
 });
 
