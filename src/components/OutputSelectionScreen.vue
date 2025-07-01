@@ -55,6 +55,18 @@
       }
     });
   }
+
+  const onOptionDeselected = (option) => {
+    // Set the option as true
+    GenerationRequest.setOutputOption(option.key, false);
+
+    // Select the component
+    options.value.forEach(o => {
+      if (o.key === option.key) {
+        o.selected = false;
+      }
+    });
+  }
 </script>
 
 <template>
@@ -78,6 +90,7 @@
                             :description="o.description"
                             :selected="o.selected"
                             @selected="onOptionSelected"
+                            @deselected="onOptionDeselected"
       />
     </OptionGroup>
   </div>
