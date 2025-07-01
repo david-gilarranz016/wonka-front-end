@@ -3,6 +3,7 @@
   import OptionGroup from './OptionGroup.vue';
   import BasicOptionComponent from './BasicOptionComponent.vue';
   import { APIResponse } from './APIResponse.js';
+  import { GenerationRequest } from './GenerationRequest.js';
 
   // Create computed properties for both output formats and options
   const formats = computed(() => APIResponse.features.filter(f => f.type === 'output,format'));
@@ -16,6 +17,20 @@
     });
   });
 
+  // Handler for format selection events
+  const onFormatSelected = (format) => {
+    // Add the format to the GenerationRequest
+    GenerationRequest.setOutputFormat(format.key);
+
+    // Unselect all other formats
+    formats.value.forEach(f => {
+      if (f.key === format.key) {
+        f.selected = true;
+      } else {
+        f.selected = false;
+      }
+    });
+  };
 </script>
 
 <template>
@@ -27,6 +42,7 @@
                             :label="f.name"
                             :description="f.description"
                             :selected="f.selected"
+                            @selected="onFormatSelected"
       />
     </OptionGroup>
     <OptionGroup title="Additional Options">

@@ -91,4 +91,44 @@ describe('OutputSelectionScreen', () => {
       expect(option.props('selected')).toEqual(false);
     });
   });
+
+  it('Sets the output format when receives a selected envent', async () => {
+    const wrapper = mount(OutputSelectionScreen);
+
+    // Select one output format
+    const option = wrapper.findAllComponents(OptionGroup)[0].findAllComponents(BasicOptionComponent)[0];
+    option.find('button').trigger('click');
+    await nextTick();
+
+    // Expect the GenerationRequest to contain the format
+    expect(GenerationRequest.request.output.format).toEqual(option.props('id'));
+  });
+
+  it('Sets the option as selected when receives a selected event', async () => {
+    const wrapper = mount(OutputSelectionScreen);
+
+    // Select one output format
+    const option = wrapper.findAllComponents(OptionGroup)[0].findAllComponents(BasicOptionComponent)[0];
+    option.find('button').trigger('click');
+
+    // Expect the BasicOption format to be selected
+    expect(option.props('selected')).toBe(true);
+  });
+
+  it('Unselects all other options when receives a selected event', async () => {
+    const wrapper = mount(OutputSelectionScreen);
+
+    // Select one output format
+    const firstOption = wrapper.findAllComponents(OptionGroup)[0].findAllComponents(BasicOptionComponent)[0];
+    firstOption.find('button').trigger('click');
+    await nextTick();
+
+    // Select a different output format
+    const secondOption = wrapper.findAllComponents(OptionGroup)[0].findAllComponents(BasicOptionComponent)[1];
+    secondOption.find('button').trigger('click');
+    await nextTick();
+
+    // Expect the first format to be unselected
+    expect(firstOption.props('selected')).toBe(false);
+  });
 });

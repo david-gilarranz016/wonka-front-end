@@ -6,7 +6,10 @@ export const GenerationRequest = reactive({
   request: {
     shell: '',
     client: '',
-    features: []
+    features: [],
+    output: {
+      format: ''
+    }
   },
   setShellTechnology(technology) {
     this.request.shell = technology;
@@ -33,5 +36,8 @@ export const GenerationRequest = reactive({
   },
   getShellTechnology() {
     return this.request.shell;
+  },
+  setOutputFormat(format) {
+    this.request.output.format = format;
   }
 });
