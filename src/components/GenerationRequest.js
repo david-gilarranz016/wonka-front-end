@@ -26,5 +26,9 @@ export const GenerationRequest = reactive({
         this.request.features[index] = feature;
       }
     });
+  },
+  removeFeature(feature) {
+    const index = this.request.features.findIndex(f => f.key === feature.key)
+    this.request.features.splice(index, 1);
   }
 });

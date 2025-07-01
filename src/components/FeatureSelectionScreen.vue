@@ -30,7 +30,7 @@
     GenerationRequest.addFeature(feature);
 
     // Set the feature as selected
-    setSelected(feature);
+    setSelected(feature, true);
   };
 
   // Handler for input selection events
@@ -43,14 +43,23 @@
     }
 
     // Set the feature as selected
-    setSelected(feature);
-  }
+    setSelected(feature, true);
+  };
+
+  // Handler for deselection events
+  const onFeatureDeselected = (feature) => {
+    // Remove the feature from the request
+    GenerationRequest.removeFeature(feature);
+    
+    // Unselect the feature
+    setSelected(feature, false);
+  };
 
   // Helper functions
-  const setSelected = (feature) => {
+  const setSelected = (feature, value) => {
     unfilteredFeatures.value.forEach(f => {
       if(f.key === feature.key) {
-        f.selected = true;
+        f.selected = value;
       }
     });
   };
@@ -66,6 +75,7 @@
                             :description="f.description"
                             :selected="f.selected"
                             @selected="onBasicFeatureSelected"
+                            @deselected="onFeatureDeselected"
       />
     </OptionGroup>
     <OptionGroup title="Additional Protections">
@@ -76,6 +86,7 @@
                             :description="p.description"
                             :selected="p.selected"
                             @selected="onBasicFeatureSelected"
+                            @deselected="onFeatureDeselected"
       />
       <InputOptionComponent v-for="p in inputProtections"
                             :key="p.key"
@@ -86,6 +97,7 @@
                             :argument-name="p.input.key"
                             :selected="p.selected"
                             @selected="onInputFeatureSelected"
+                            @deselected="onFeatureDeselected"
       />
     </OptionGroup>
   </div>

@@ -261,6 +261,102 @@ describe('FeatureSelectionScreen', () => {
     // Expect the triggering option to be selected
     expect(option.props('selected')).toBe(true);
   });
+
+  it('Removes deselected features from the GenerationRequest', async () => {
+    const wrapper = await mockAxiosAndCreateWrapper();
+
+    // Click on the first option twice to select it and then deselect it
+    const option = wrapper.findAllComponents(OptionGroup)[0].findAllComponents(BasicOptionComponent)[0];
+
+    option.find('button').trigger('click');
+    await nextTick();
+
+    option.find('button').trigger('click');
+    await nextTick();
+
+    // Expect the GenerationRequest not to contain the 
+    expect(GenerationRequest.request.features.find(f => f.key === option.props('id'))).toBeUndefined();
+  });
+
+  it('Sets the feature BasicOption as deselected when the deselected event is received', async () => {
+    const wrapper = await mockAxiosAndCreateWrapper();
+
+    // Click on the first option twice to select it and then deselect it
+    const option = wrapper.findAllComponents(OptionGroup)[0].findAllComponents(BasicOptionComponent)[0];
+
+    option.find('button').trigger('click');
+    await nextTick();
+
+    option.find('button').trigger('click');
+    await nextTick();
+
+    // Expect the triggering option to be selected
+    expect(option.props('selected')).toBe(false);
+  });
+
+  it('Removes deselected basic protections to the GenerationRequest', async () => {
+    const wrapper = await mockAxiosAndCreateWrapper();
+
+    // Click on the first option twice to select it and then deselect it
+    const option = wrapper.findAllComponents(OptionGroup)[1].findAllComponents(BasicOptionComponent)[0];
+
+    option.find('button').trigger('click');
+    await nextTick();
+
+    option.find('button').trigger('click');
+    await nextTick();
+
+    // Expect the GenerationRequest not to contain the 
+    expect(GenerationRequest.request.features.find(f => f.key === option.props('id'))).toBeUndefined();
+  });
+
+  it('Sets the protection BasicOption as deselected when the deselected event is received', async () => {
+    const wrapper = await mockAxiosAndCreateWrapper();
+
+    // Click on the first option twice to select it and then deselect it
+    const option = wrapper.findAllComponents(OptionGroup)[1].findAllComponents(BasicOptionComponent)[0];
+
+    option.find('button').trigger('click');
+    await nextTick();
+
+    option.find('button').trigger('click');
+    await nextTick();
+
+    // Expect the triggering option to be selected
+    expect(option.props('selected')).toBe(false);
+  });
+
+  it('Removes deselected input protections to the GenerationRequest', async () => {
+    const wrapper = await mockAxiosAndCreateWrapper();
+
+    // Add text to the input and then clear it to trigger the deselected event
+    const option = wrapper.findAllComponents(OptionGroup)[1].findAllComponents(InputOptionComponent)[0];
+
+    option.find('input').setValue('Test');
+    await nextTick();
+
+    option.find('input').setValue('');
+    await nextTick();
+
+    // Expect the GenerationRequest not to contain the 
+    expect(GenerationRequest.request.features.find(f => f.key === option.props('id'))).toBeUndefined();
+  });
+
+  it('Sets the protection InputOption as deselected when the deselected event is received', async () => {
+    const wrapper = await mockAxiosAndCreateWrapper();
+
+    // Click on the first option twice to select it and then deselect it
+    const option = wrapper.findAllComponents(OptionGroup)[1].findAllComponents(InputOptionComponent)[0];
+
+    option.find('input').setValue('Test');
+    await nextTick();
+
+    option.find('input').setValue('');
+    await nextTick();
+
+    // Expect the triggering option to be selected
+    expect(option.props('selected')).toBe(false);
+  });
 });
 
 async function mockAxiosAndCreateWrapper() {
