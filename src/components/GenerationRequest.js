@@ -4,9 +4,13 @@ import { reactive } from 'vue';
 
 export const GenerationRequest = reactive({
   request: {
-    shell: ''
+    shell: '',
+    client: ''
   },
   setShellTechnology(technology) {
     this.request.shell = technology;
+  },
+  setClientTechnology(technology) {
+    this.request.client = technology;
   }
 });
