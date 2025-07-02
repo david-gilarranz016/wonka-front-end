@@ -1,6 +1,7 @@
 <script setup>
   import axios from 'axios';
-  import { ref, onMounted } from 'vue';
+  import { ref, onMounted, computed } from 'vue';
+  import { useRouter } from 'vue-router';
 
   import OptionGroup from './OptionGroup.vue';
   import BasicOptionComponent from './BasicOptionComponent.vue';
@@ -8,6 +9,10 @@
 
   // Create a ref for the available technologies
   const technologies = ref([]);
+  const router = useRouter();
+
+  // Computed properties
+  const selected = computed(() => GenerationRequest.request.client !== '');
 
   // On Mount, request technologies from the server
   onMounted(async () => {
@@ -48,17 +53,26 @@
       }
     });
   };
+
+  const onNavigate = () => {
+    if (selected.value) {
+      router.push('/result');
+    }
+  };
 </script>
 <template>
-  <OptionGroup title="Client Technologies">
-    <BasicOptionComponent v-for="t in technologies"
-                          :key="t.technology"
-                          :id="t.technology"
-                          :label="t.technology"
-                          :description="t.technology"
-                          :selected="t.selected"
-                          @selected="onTechnologySelected"
-                          @deselected="onTechnologyDeselected"
-    />
-  </OptionGroup>
+  <div>
+    <OptionGroup title="Client Technologies">
+      <BasicOptionComponent v-for="t in technologies"
+                            :key="t.technology"
+                            :id="t.technology"
+                            :label="t.technology"
+                            :description="t.technology"
+                            :selected="t.selected"
+                            @selected="onTechnologySelected"
+                            @deselected="onTechnologyDeselected"
+      />
+    </OptionGroup>
+    <button id="navigation-button" @click="onNavigate">Generate</button>
+  </div>
 </template>
