@@ -57,6 +57,12 @@ describe('ResultScreen', () => {
     expect(wrapper.findAll('a')[0].attributes('href')).toEqual(`${import.meta.env.VITE_API_BASE}${mockedResponse.shell.url}`);
   });
 
+  it('Opens shell download link in new tab', async () => {
+    const wrapper =  await mockAxiosAndCreateWrapper();
+
+    expect(wrapper.findAll('a')[0].attributes('target')).toEqual('_blank');
+  });
+
   it('If successfull, shows client checksum', async () => {
     const wrapper =  await mockAxiosAndCreateWrapper();
 
@@ -68,6 +74,12 @@ describe('ResultScreen', () => {
     const wrapper =  await mockAxiosAndCreateWrapper();
 
     expect(wrapper.findAll('a')[1].attributes('href')).toEqual(`${import.meta.env.VITE_API_BASE}${mockedResponse.client.url}`);
+  });
+
+  it('Opens client download link in new tab', async () => {
+    const wrapper =  await mockAxiosAndCreateWrapper();
+
+    expect(wrapper.findAll('a')[1].attributes('target')).toEqual('_blank');
   });
 
   it('Allows starting over the process', async () => {
