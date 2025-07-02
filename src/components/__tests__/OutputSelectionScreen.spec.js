@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
-import { mount, flushPromises } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
 import { nextTick } from 'vue';
-import axios from 'axios';
+import { useRouter } from 'vue-router';
 
 import OutputSelectionScreen from '../OutputSelectionScreen.vue';
 import OptionGroup from '../OptionGroup.vue';
@@ -36,6 +36,13 @@ const mockFeatures = [
     description: 'Obfuscate the generated shell'
   }
 ];
+
+// Mock the Router
+vi.mock('vue-router', () => ({
+  useRouter: vi.fn(() => ({
+    push: () => {}
+  }))
+}));
 
 describe('OutputSelectionScreen', () => {
   beforeEach(() => {
@@ -220,5 +227,46 @@ describe('OutputSelectionScreen', () => {
 
     // Expect the BasicOption format to be selected
     expect(option.props('selected')).toBe(false);
+  });
+
+  it('Sets all output options as false on mount', async () => {
+    mount(OutputSelectionScreen);
+    
+    mockFeatures.filter(f => f.type === 'output,option').forEach(option => {
+      // Expect the GenerationRequest to contain the output option as false
+      expect(GenerationRequest.request.output[option.key]).toBe(false);
+    });
+  });
+
+  it('Navigates to the next screen', async () => {
+    // Stub the router
+    const push = vi.fn();
+    useRouter.mockImplementationOnce(() => ({ push }));
+
+    const wrapper = mount(OutputSelectionScreen);
+
+    // Select one output format
+    const option = wrapper.findAllComponents(OptionGroup)[0].findAllComponents(BasicOptionComponent)[0];
+
+    option.find('button').trigger('click');
+    await nextTick();
+
+    // Trigger the navigation
+    wrapper.find('#navigation-button').trigger('click');
+
+    expect(push).toHaveBeenCalledExactlyOnceWith('/client');
+  });
+
+  it('Does not navigate to the next unless an output format is selected', async () => {
+    // Stub the router
+    const push = vi.fn();
+    useRouter.mockImplementationOnce(() => ({ push }));
+
+    const wrapper = mount(OutputSelectionScreen);
+
+    // Trigger the navigation
+    wrapper.find('#navigation-button').trigger('click');
+
+    expect(push).not.toHaveBeenCalled();
   });
 });

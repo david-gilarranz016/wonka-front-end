@@ -1,9 +1,13 @@
 <script setup>
   import { computed, onMounted } from 'vue';
+  import { useRouter } from 'vue-router';
+
   import OptionGroup from './OptionGroup.vue';
   import BasicOptionComponent from './BasicOptionComponent.vue';
   import { APIResponse } from './APIResponse.js';
   import { GenerationRequest } from './GenerationRequest.js';
+
+  const router = useRouter();
 
   // Create computed properties for both output formats and options
   const formats = computed(() => APIResponse.features.filter(f => f.type === 'output,format'));
@@ -15,6 +19,9 @@
     APIResponse.features.filter(f => f.type.startsWith('output')).forEach(format => {
       format.selected = false; 
     });
+
+    // Initialize all options to false
+    options.value.forEach(option => GenerationRequest.setOutputOption(option.key, false));
   });
 
   // Handler for format selection events
@@ -67,6 +74,12 @@
       }
     });
   }
+
+  const onNavigate = () => {
+    if (GenerationRequest.request.output.format !== '') {
+      router.push('/client');
+    }
+  }
 </script>
 
 <template>
@@ -93,5 +106,6 @@
                             @deselected="onOptionDeselected"
       />
     </OptionGroup>
+    <button id="navigation-button" @click="onNavigate">Continue</button>
   </div>
 </template>
