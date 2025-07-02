@@ -24,7 +24,7 @@ const mockedResponse = {
   }
 }
 
-// Mock the $router object
+// Mock the Router
 vi.mock('vue-router', () => ({
   useRouter: vi.fn(() => ({
     push: () => {}
