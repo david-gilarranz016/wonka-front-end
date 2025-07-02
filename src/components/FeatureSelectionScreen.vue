@@ -1,6 +1,8 @@
 <script setup>
   import axios from 'axios';
   import { onMounted, ref, computed } from 'vue';
+  import { useRouter } from 'vue-router';
+
   import OptionGroup from './OptionGroup.vue';
   import BasicOptionComponent from './BasicOptionComponent.vue';
   import InputOptionComponent from './InputOptionComponent.vue';
@@ -9,11 +11,13 @@
 
   // State variables
   const unfilteredFeatures = ref([]);
+  const router = useRouter();
 
   // Computed properties to distinguish between basic and non input-based protections
   const features = computed(() => APIResponse.features.filter(f => f.type === 'feature'));
   const basicProtections = computed(() => APIResponse.features.filter(p => p.type === 'security' && p.input === undefined));
   const inputProtections = computed(() => APIResponse.features.filter(p => p.type === 'security' && p.input !== undefined));
+  const selected = computed(() => GenerationRequest.request.features.length > 0);
 
   // When mounted, request the selected technology's features
   onMounted(async () => {
@@ -64,6 +68,12 @@
       }
     });
   };
+
+  const onNavigate = () => {
+    if (selected.value) {
+      router.push('/output');
+    }
+  };
 </script>
 
 <template>
@@ -101,5 +111,6 @@
                             @deselected="onFeatureDeselected"
       />
     </OptionGroup>
+    <button id="navigation-button" @click="onNavigate">Continue</button>
   </div>
 </template>

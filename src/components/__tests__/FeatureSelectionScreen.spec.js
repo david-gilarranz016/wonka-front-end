@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
 import { nextTick } from 'vue';
+import { useRouter } from 'vue-router';
 import axios from 'axios';
 
 import FeatureSelectionScreen from '../FeatureSelectionScreen.vue';
@@ -44,12 +45,17 @@ const mockedFeatures = [
   }
 ];
 
+// Mock the Router
+vi.mock('vue-router', () => ({
+  useRouter: vi.fn(() => ({
+    push: () => {}
+  }))
+}));
+
 describe('FeatureSelectionScreen', () => {
   beforeEach(() => {
     // Before each test, ensure a web shell technology is selected 
     GenerationRequest.setShellTechnology('php');
-
-    // vi.stubGlobal('$route', mockRoute);
   });
 
   afterEach(() => {
@@ -354,6 +360,42 @@ describe('FeatureSelectionScreen', () => {
 
     // Expect the triggering option to be selected
     expect(option.props('selected')).toBe(false);
+  });
+
+  it('Navigates to the next screen', async () => {
+    // Set up a test stub for the router
+    const push = vi.fn();
+    useRouter.mockImplementationOnce(() => ({ push }));
+    
+    const wrapper = await mockAxiosAndCreateWrapper();
+
+    // Modify the option
+    const option = wrapper.findAllComponents(OptionGroup)[1].findAllComponents(InputOptionComponent)[0];
+    option.find('input').setValue('Test');
+
+    // Click on the navigation button
+    wrapper.find('#navigation-button').trigger('click');
+
+    // Wait for the DOM to update
+    await nextTick();
+
+    expect(push).toHaveBeenCalledExactlyOnceWith('/output');
+  });
+
+  it('Does not navaigate to the next screen if no features have been selected', async () => {
+    // Set up a test stub for the router
+    const push = vi.fn();
+    useRouter.mockImplementationOnce(() => ({ push }));
+    
+    const wrapper = await mockAxiosAndCreateWrapper();
+
+    // Click on the navigation button
+    wrapper.find('#navigation-button').trigger('click');
+
+    // Wait for the DOM to update
+    await nextTick();
+
+    expect(push).not.toHaveBeenCalled();
   });
 });
 
