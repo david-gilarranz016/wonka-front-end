@@ -29,6 +29,22 @@ describe('InputOptionComponent', () => {
     expect(wrapper.find('div').attributes('title')).toEqual(props.description);
   });
 
+  it('Displays the correct placeholder', () => {
+    // Render the Component
+    const wrapper = mount(InputOptionComponent, { props });
+
+    // Expect the button to have title attribute set
+    expect(wrapper.find('input').attributes('placeholder')).toEqual(props.placeholder);
+  });
+
+  it('Displays the correct label', () => {
+    // Render the Component
+    const wrapper = mount(InputOptionComponent, { props });
+
+    // Expect the button to have title attribute set
+    expect(wrapper.find('label').text()).toEqual(props.label);
+  });
+
   it('Emits a "selected" envent when input changes', () => {
     // Render the Component
     const wrapper = mount(InputOptionComponent, { props });
@@ -87,6 +103,6 @@ describe('InputOptionComponent', () => {
       {
         key: props.id
       }
-    ])
+    ]);
   });
 });

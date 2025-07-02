@@ -34,6 +34,6 @@
 <template>
   <div :title="props.description">
     <label :for="props.id">{{props.label}}</label>
-    <input :id="props.id" type="text" @input=onInput placeholder="props.placeholder" />
+    <input :id="props.id" type="text" @input=onInput :placeholder="props.placeholder" />
   </div>
 </template>
