@@ -1,13 +1,12 @@
-import { describe, it, expect, vi, afterEach } from 'vitest';
+import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
 import axios from 'axios';
 
 import ResultScreen from '../ResultScreen.vue';
-import OptionGroup from '../OptionGroup.vue';
-import BasicOptionComponent from '../BasicOptionComponent.vue';
 import { GenerationRequest } from '../GenerationRequest.js';
-import { nextTick } from 'vue';
+import { useRouter } from 'vue-router';
 
+// Mocks required for the tests
 const mockedResponse = {
   "shell": {
     "url": "https://example.com/output/3ea115a03afa09aa3fee61a882760812.php",
@@ -24,6 +23,13 @@ const mockedResponse = {
     }
   }
 }
+
+// Mock the $router object
+vi.mock('vue-router', () => ({
+  useRouter: vi.fn(() => ({
+    push: () => {}
+  }))
+}));
 
 describe('ResultScreen', () => {
   it('Sends the GenerationRequest to the backend', async () => {
@@ -45,24 +51,38 @@ describe('ResultScreen', () => {
     expect(wrapper.text()).toContain(mockedResponse.shell.checksum.value);
   });
 
-  it('If successfull, show shell download link', async() => {
+  it('If successfull, show shell download link', async () => {
     const wrapper =  await mockAxiosAndCreateWrapper();
 
     expect(wrapper.findAll('a')[0].attributes('href')).toEqual(mockedResponse.shell.url);
   });
 
-  it('If successfull, shows client checksum', async() => {
+  it('If successfull, shows client checksum', async () => {
     const wrapper =  await mockAxiosAndCreateWrapper();
 
     expect(wrapper.text()).toContain(mockedResponse.client.checksum.algorithm);
     expect(wrapper.text()).toContain(mockedResponse.client.checksum.value);
   });
 
-  it('If successfull, show client download link', async() => {
+  it('If successfull, show client download link', async () => {
     const wrapper =  await mockAxiosAndCreateWrapper();
 
     expect(wrapper.findAll('a')[1].attributes('href')).toEqual(mockedResponse.client.url);
   });
+
+  it('Allows starting over the process', async () => {
+    // Provide a mock implementation for the router.push method
+    const push = vi.fn();
+    useRouter.mockImplementationOnce(() => ({ push }) );
+
+    const wrapper =  await mockAxiosAndCreateWrapper();
+
+    // Find and click the button that returns to the main screen
+    wrapper.find('button').trigger('click');
+
+    expect(push).toHaveBeenCalledExactlyOnceWith('/');
+  });
+
 });
 
 

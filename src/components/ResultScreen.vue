@@ -1,10 +1,12 @@
 <script setup>
   import { onMounted, ref } from 'vue';
   import axios from 'axios';
+  import { useRouter } from 'vue-router';
   import { GenerationRequest } from './GenerationRequest.js';
 
   const success = ref(null);
   const response = ref({});
+  const router = useRouter();
 
   onMounted(async () => {
     // Send the generation request
@@ -15,6 +17,11 @@
       success.value = false;
     }
   });
+
+  const onStartOver = () => {
+    // Navigate to the home screen
+    router.push('/');
+  };
 </script>
 
 <template>
@@ -38,5 +45,6 @@
     <div v-else="success">
       <h2>An error has occurred</h2>
     </div>
+    <button @click="onStartOver">Start over</button>
   </div>
 </template>
