@@ -27,7 +27,7 @@ describe('ClientSelectionScreen', () => {
 
     // Expect the API to have been called
     expect(axios.get).toHaveBeenCalledTimes(1);
-    expect(axios.get).toHaveBeenCalledWith(`${process.env.VUE_APP_API_BASE}/client`);
+    expect(axios.get).toHaveBeenCalledWith(`${import.meta.env.VITE_API_BASE}/client`);
   });
 
   it('Creates an OptionGroup for the requested technologies', async () => {
@@ -161,15 +161,17 @@ describe('ClientSelectionScreen', () => {
 
 async function mockAxiosAndCreateWrapper() {
   // Mock the axios `get` method
-  const mockedTechnologies = [
-    {
-      technology: 'python',
-    },
-    {
-      technology: 'ruby',
-    }
-  ];
-  vi.spyOn(axios, 'get').mockResolvedValue(mockedTechnologies);
+  const mockedResponse = {
+    data: [
+      {
+        technology: 'python',
+      },
+      {
+        technology: 'ruby',
+      }
+    ]
+  };
+  vi.spyOn(axios, 'get').mockResolvedValue(mockedResponse);
 
   // Mount the component
   const wrapper = mount(ClientSelectionScreen);

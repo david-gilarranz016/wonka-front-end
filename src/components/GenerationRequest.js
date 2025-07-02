@@ -42,5 +42,15 @@ export const GenerationRequest = reactive({
   },
   setOutputOption(option, value) {
     this.request.output[option] = value
+  },
+  reset() {
+    this.request = {
+      shell: '',
+      client: '',
+      features: [],
+      output: {
+        format: ''
+      }
+    }
   }
 });

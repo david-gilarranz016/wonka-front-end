@@ -1,17 +1,22 @@
 <script setup>
-  import { onMounted, ref } from 'vue';
+  import { onMounted, ref, computed } from 'vue';
   import axios from 'axios';
   import { useRouter } from 'vue-router';
   import { GenerationRequest } from './GenerationRequest.js';
 
+  // State refs
   const success = ref(null);
   const response = ref({});
   const router = useRouter();
 
+  // Computed properties
+  const shellUrl = computed(() => `${import.meta.env.VITE_API_BASE}${response.value.shell ? response.value.shell.url : ''}`);
+  const clientUrl = computed(() => `${import.meta.env.VITE_API_BASE}${response.value.client ? response.value.client.url : ''}`);
+
   onMounted(async () => {
     // Send the generation request
     try {
-      response.value = await axios.post(`${process.env.VUE_APP_API_BASE}/generator`, GenerationRequest.request);
+      response.value = (await axios.post(`${import.meta.env.VITE_API_BASE}/generator`, GenerationRequest.request)).data;
       success.value = true;
     } catch (error) {
       success.value = false;
@@ -19,6 +24,9 @@
   });
 
   const onStartOver = () => {
+    // Reset the Generation request
+    GenerationRequest.reset();
+
     // Navigate to the home screen
     router.push('/');
   };
@@ -30,12 +38,12 @@
       <h2>Web Shell</h2>
       <ul>
         <li>Checksum: {{ response.shell.checksum.value }} ({{ response.shell.checksum.algorithm }})</li>
-        <li>Download link: <a :href="response.shell.url" target="_blank">{{ response.shell.url }}</a></li>
+        <li>Download link: <a :href="shellUrl" target="_blank">{{ shellUrl }}</a></li>
       </ul>
       <h2>Client</h2>
       <ul>
         <li>Checksum: {{ response.client.checksum.value }} ({{ response.client.checksum.algorithm }})</li>
-        <li>Download link: <a :href="response.client.url" target="_blank">{{ response.client.url }}</a></li>
+        <li>Download link: <a :href="clientUrl" target="_blank">{{ clientUrl }}</a></li>
       </ul>
       <p>
         <b>Note:</b>Installation of dependencies might be necessary for the client to work. If unable to run

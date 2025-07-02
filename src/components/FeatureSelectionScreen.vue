@@ -22,11 +22,11 @@
   // When mounted, request the selected technology's features
   onMounted(async () => {
     // Request the features
-    const response = await axios.get(`${process.env.VUE_APP_API_BASE}/web-shell/${GenerationRequest.getShellTechnology()}`);
-    response.forEach(f => f.selected = false);
+    const response = await axios.get(`${import.meta.env.VITE_API_BASE}/web-shell/${GenerationRequest.getShellTechnology()}`);
+    response.data.forEach(f => f.selected = false);
 
     // Initialize the features and protection arrays
-    APIResponse.features = response;
+    APIResponse.features = response.data;
   });
 
   // Handler for feature and protection selection events

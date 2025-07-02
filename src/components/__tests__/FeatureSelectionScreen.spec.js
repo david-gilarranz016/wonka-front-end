@@ -69,7 +69,7 @@ describe('FeatureSelectionScreen', () => {
 
     // Expect the API to have been called with the appropriate technology
     expect(axios.get).toHaveBeenCalledTimes(1);
-    expect(axios.get).toHaveBeenCalledWith(`${process.env.VUE_APP_API_BASE}/web-shell/${GenerationRequest.request.shell}`);
+    expect(axios.get).toHaveBeenCalledWith(`${import.meta.env.VITE_API_BASE}/web-shell/${GenerationRequest.request.shell}`);
   });
 
   it("Requests a different selected technology's features to the backend", async () => {
@@ -81,7 +81,7 @@ describe('FeatureSelectionScreen', () => {
 
     // Expect the API to have been called with the appropriate technology
     expect(axios.get).toHaveBeenCalledTimes(1);
-    expect(axios.get).toHaveBeenCalledWith(`${process.env.VUE_APP_API_BASE}/web-shell/${GenerationRequest.request.shell}`);
+    expect(axios.get).toHaveBeenCalledWith(`${import.meta.env.VITE_API_BASE}/web-shell/${GenerationRequest.request.shell}`);
   });
 
   it('Stores the response in the APIResponse object', async () => {
@@ -401,7 +401,7 @@ describe('FeatureSelectionScreen', () => {
 
 async function mockAxiosAndCreateWrapper() {
   // Mock the axios `get` method
-  vi.spyOn(axios, 'get').mockResolvedValue(mockedFeatures);
+  vi.spyOn(axios, 'get').mockResolvedValue({ data: mockedFeatures });
 
   // Mount the component
   const wrapper = mount(FeatureSelectionScreen);

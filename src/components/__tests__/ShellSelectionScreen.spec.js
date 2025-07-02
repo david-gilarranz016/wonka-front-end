@@ -27,7 +27,7 @@ describe('ShellSelectionScreen', () => {
 
     // Expect the API to have been called
     expect(axios.get).toHaveBeenCalledTimes(1);
-    expect(axios.get).toHaveBeenCalledWith(`${process.env.VUE_APP_API_BASE}/web-shell`);
+    expect(axios.get).toHaveBeenCalledWith(`${import.meta.env.VITE_API_BASE}/web-shell`);
   });
 
   it('Creates an OptionGroup for the requested technologies', async () => {
@@ -165,17 +165,19 @@ describe('ShellSelectionScreen', () => {
 
 async function mockAxiosAndCreateWrapper() {
   // Mock the axios `get` method
-  const mockedTechnologies = [
-    {
-      technology: 'php',
-      url: '/web-shell/php'
-    },
-    {
-      technology: 'asp',
-      url: '/web-shell/asp'
-    }
-  ];
-  vi.spyOn(axios, 'get').mockResolvedValue(mockedTechnologies);
+  const mockedResponse = {
+    data: [
+      {
+        technology: 'php',
+        url: '/web-shell/php'
+      },
+      {
+        technology: 'asp',
+        url: '/web-shell/asp'
+      }
+    ]
+  };
+  vi.spyOn(axios, 'get').mockResolvedValue(mockedResponse);
 
   // Mount the component
   const wrapper = mount(ShellSelectionScreen);

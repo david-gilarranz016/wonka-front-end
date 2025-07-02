@@ -17,13 +17,13 @@
   // On Mount, request technologies from the server
   onMounted(async () => {
     // Get the available technologies
-    const availableTechnologies = await axios.get(`${process.env.VUE_APP_API_BASE}/client`);
+    const availableTechnologies = await axios.get(`${import.meta.env.VITE_API_BASE}/client`);
 
     // Mark all of them as unselected
-    availableTechnologies.forEach((t) => t.selected = false);
+    availableTechnologies.data.forEach((t) => t.selected = false);
 
     // Update the technologies array
-    technologies.value = availableTechnologies;
+    technologies.value = availableTechnologies.data;
   });
 
   // Handlers for selection events
