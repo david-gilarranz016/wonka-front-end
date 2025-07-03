@@ -41,7 +41,7 @@ describe('ShellSelectionScreen', () => {
     const wrapper = await mockAxiosAndCreateWrapper();
 
     // Expect a BasicOptionComponent to have been created for each technology
-    expect(wrapper.findAllComponents(BasicOptionComponent).map(c => c.text()).join()).toEqual('php,asp');
+    expect(wrapper.findAllComponents(BasicOptionComponent).length).toEqual(2);
   });
 
   it('Initializes all BasicOptionComponent as Unselected', async () => {

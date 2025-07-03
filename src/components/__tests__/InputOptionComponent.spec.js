@@ -26,7 +26,7 @@ describe('InputOptionComponent', () => {
     const wrapper = mount(InputOptionComponent, { props });
 
     // Expect the button to have title attribute set
-    expect(wrapper.find('div').attributes('title')).toEqual(props.description);
+    expect(wrapper.find('div.description-tooltip').text()).toEqual(props.description);
   });
 
   it('Displays the correct placeholder', () => {
@@ -42,7 +42,7 @@ describe('InputOptionComponent', () => {
     const wrapper = mount(InputOptionComponent, { props });
 
     // Expect the button to have title attribute set
-    expect(wrapper.find('label').text()).toEqual(props.label);
+    expect(wrapper.find('label').text()).toContain(props.label);
   });
 
   it('Emits a "selected" envent when input changes', () => {

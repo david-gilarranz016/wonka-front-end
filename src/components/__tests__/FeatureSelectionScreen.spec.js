@@ -145,7 +145,7 @@ describe('FeatureSelectionScreen', () => {
       const option = wrapper.findAllComponents(InputOptionComponent).filter(c => c.props('id') === p.key)[0];
 
       // Expect the props to be correct
-      expect(option.props('label')).toEqual(p.name);
+      expect(option.props('label')).toEqual(p.input.label);
       expect(option.props('description')).toEqual(p.description);
       expect(option.props('placeholder')).toEqual(p.input.placeholder);
       expect(option.props('argumentName')).toEqual(p.input.key);

@@ -25,7 +25,6 @@
       t.selected = false;
       APIResponse.dependencies[t.technology] = t.dependencies;
     });
-    console.log(availableTechnologies);
 
     // Update the technologies array
     technologies.value = availableTechnologies.data;

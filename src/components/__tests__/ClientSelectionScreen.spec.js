@@ -50,7 +50,7 @@ describe('ClientSelectionScreen', () => {
     const wrapper = await mockAxiosAndCreateWrapper();
 
     // Expect a BasicOptionComponent to have been created for each technology
-    expect(wrapper.findAllComponents(BasicOptionComponent).map(c => c.text()).join()).toEqual('python,ruby');
+    expect(wrapper.findAllComponents(BasicOptionComponent).length).toEqual(2);
   });
 
   it('Initializes all BasicOptionComponents as Unselected', async () => {

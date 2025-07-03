@@ -25,7 +25,7 @@ describe('BasicOptionComponent', () => {
     const wrapper = mount(BasicOptionComponent, { props });
 
     // Expect the button to have title attribute set
-    expect(wrapper.find('button').attributes('title')).toEqual(props.description);
+    expect(wrapper.find('div.description-tooltip').text()).toEqual(props.description);
   });
 
   it('Emits a "selected" event when clicked if it was not already selected', () => {

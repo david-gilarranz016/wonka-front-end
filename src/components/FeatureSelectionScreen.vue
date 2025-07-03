@@ -105,7 +105,7 @@
       <InputOptionComponent v-for="p in inputProtections"
                             :key="p.key"
                             :id="p.key"
-                            :label="p.name"
+                            :label="p.input.label"
                             :description="p.description"
                             :placeholder="p.input.placeholder"
                             :argument-name="p.input.key"
