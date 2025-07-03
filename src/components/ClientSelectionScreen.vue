@@ -6,6 +6,7 @@
   import OptionGroup from './OptionGroup.vue';
   import BasicOptionComponent from './BasicOptionComponent.vue';
   import { GenerationRequest } from './GenerationRequest.js';
+  import { APIResponse } from './APIResponse.js';
 
   // Create a ref for the available technologies
   const technologies = ref([]);
@@ -19,8 +20,11 @@
     // Get the available technologies
     const availableTechnologies = await axios.get(`${import.meta.env.VITE_API_BASE}/client`);
 
-    // Mark all of them as unselected
-    availableTechnologies.data.forEach((t) => t.selected = false);
+    // Mark all of them as unselected and store the dependencies in APIResponse
+    availableTechnologies.data.forEach((t) => { 
+      t.selected = false;
+      APIResponse.dependencies[t.technology] = t.dependencies;
+    });
 
     // Update the technologies array
     technologies.value = availableTechnologies.data;

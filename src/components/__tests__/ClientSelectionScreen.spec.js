@@ -8,6 +8,7 @@ import ClientSelectionScreen from '../ClientSelectionScreen.vue';
 import OptionGroup from '../OptionGroup.vue';
 import BasicOptionComponent from '../BasicOptionComponent.vue';
 import { GenerationRequest } from '../GenerationRequest.js';
+import { APIResponse } from '../APIResponse';
 
 // Mock the Router
 vi.mock('vue-router', () => ({
@@ -28,6 +29,13 @@ describe('ClientSelectionScreen', () => {
     // Expect the API to have been called
     expect(axios.get).toHaveBeenCalledTimes(1);
     expect(axios.get).toHaveBeenCalledWith(`${import.meta.env.VITE_API_BASE}/client`);
+  });
+
+  it('Stores the dependencies for each client in the APIResponse object', async () => {
+    await mockAxiosAndCreateWrapper();
+  
+    expect(APIResponse.dependencies.python).toEqual('/dependencies/requirements.txt')
+    expect(APIResponse.dependencies.ruby).toEqual('/dependencies/Gemfile')
   });
 
   it('Creates an OptionGroup for the requested technologies', async () => {
@@ -165,9 +173,11 @@ async function mockAxiosAndCreateWrapper() {
     data: [
       {
         technology: 'python',
+        dependencies: '/dependencies/requirements.txt'
       },
       {
         technology: 'ruby',
+        dependencies: '/dependencies/Gemfile'
       }
     ]
   };
