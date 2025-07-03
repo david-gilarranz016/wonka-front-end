@@ -9,6 +9,10 @@
   import { GenerationRequest } from './GenerationRequest.js';
   import { APIResponse } from './APIResponse.js';
 
+  // Constants
+  const featuresDescription = 'Select the desired features for the generated web-shell';
+  const securityDescription = 'Select any additional protections to build into the shell, other than the default ones';
+
   // State variables
   const unfilteredFeatures = ref([]);
   const router = useRouter();
@@ -79,7 +83,7 @@
 <template>
   <div>
     <div class="mb-10">
-      <OptionGroup title="WebShell Features">
+      <OptionGroup title="WebShell Features" :description="featuresDescription">
         <BasicOptionComponent v-for="f in features"
                               :key="f.key"
                               :id="f.key"
@@ -92,7 +96,7 @@
       </OptionGroup>
     </div>
     <div class="mb-10">
-    <OptionGroup title="Additional Protections">
+    <OptionGroup title="Additional Protections" :description="securityDescription">
       <BasicOptionComponent v-for="p in basicProtections"
                             :key="p.key"
                             :id="p.key"

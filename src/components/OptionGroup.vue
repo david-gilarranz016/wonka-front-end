@@ -7,7 +7,7 @@
 
 <template>
   <h2 class="title">{{props.title}}</h2>
-  <p>{{ description }}</p>
+  <p class="mb-5">{{ description }}</p>
   <div class="flex justify-center">
     <slot/>
   </div>

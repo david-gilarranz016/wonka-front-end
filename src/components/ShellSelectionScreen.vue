@@ -7,6 +7,9 @@
   import BasicOptionComponent from './BasicOptionComponent.vue';
   import { GenerationRequest } from './GenerationRequest.js';
 
+  // Constants
+  const description = "Select the target technology for the generated web shell";
+
   // Create a ref for the available technologies
   const technologies = ref([]);
   const selected = computed(() => GenerationRequest.getShellTechnology() !== '');
@@ -59,7 +62,7 @@
   };
 </script>
 <template>
-  <OptionGroup title="WebShell Technologies">
+  <OptionGroup title="WebShell Technologies" :description="description">
     <BasicOptionComponent v-for="t in technologies"
                           :key="t.technology"
                           :id="t.technology"

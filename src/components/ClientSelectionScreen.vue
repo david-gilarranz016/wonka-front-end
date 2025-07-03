@@ -8,6 +8,8 @@
   import { GenerationRequest } from './GenerationRequest.js';
   import { APIResponse } from './APIResponse.js';
 
+  const description = 'Select the technology for the client';
+
   // Create a ref for the available technologies
   const technologies = ref([]);
   const router = useRouter();
@@ -67,7 +69,7 @@
 <template>
   <div>
     <div class="mb-10">
-    <OptionGroup title="Client Technologies">
+    <OptionGroup title="Client Technologies" :description="description">
       <BasicOptionComponent v-for="t in technologies"
                             :key="t.technology"
                             :id="t.technology"

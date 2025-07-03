@@ -9,6 +9,9 @@
 
   const router = useRouter();
 
+  const formatsDescription = 'Select the desired output format for the generated web shell';
+  const optionsDescription = 'Select additional operations to be performed to the generated shell';
+
   // Create computed properties for both output formats and options
   const formats = computed(() => APIResponse.features.filter(f => f.type === 'output,format'));
   const options = computed(() => APIResponse.features.filter(f => f.type === 'output,option'));
@@ -85,7 +88,7 @@
 <template>
   <div>
     <div class="mb-10">
-      <OptionGroup title="Output Formats">
+      <OptionGroup title="Output Formats" :description="formatsDescription">
         <BasicOptionComponent v-for="f in formats"
                               :key="f.key"
                               :id="f.key"
@@ -98,7 +101,7 @@
       </OptionGroup>
     </div>
     <div class="mb-10">
-      <OptionGroup title="Additional Options">
+      <OptionGroup title="Additional Options" :description="optionsDescription">
         <BasicOptionComponent v-for="o in options"
                               :key="o.key"
                               :id="o.key"
