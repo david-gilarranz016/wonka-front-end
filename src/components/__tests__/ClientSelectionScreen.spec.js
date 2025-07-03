@@ -21,6 +21,7 @@ describe('ClientSelectionScreen', () => {
   // Reset global state after each test
   afterEach(() => {
     GenerationRequest.setClientTechnology('');
+    APIResponse.dependencies = {};
   });
 
   it('Requests available technologies from the backend', async () => {
