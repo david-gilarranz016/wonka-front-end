@@ -84,28 +84,34 @@
 
 <template>
   <div>
-    <OptionGroup title="Output Formats">
-      <BasicOptionComponent v-for="f in formats"
-                            :key="f.key"
-                            :id="f.key"
-                            :label="f.name"
-                            :description="f.description"
-                            :selected="f.selected"
-                            @selected="onFormatSelected"
-                            @deselected="onFormatDeselected"
-      />
-    </OptionGroup>
-    <OptionGroup title="Additional Options">
-      <BasicOptionComponent v-for="o in options"
-                            :key="o.key"
-                            :id="o.key"
-                            :label="o.name"
-                            :description="o.description"
-                            :selected="o.selected"
-                            @selected="onOptionSelected"
-                            @deselected="onOptionDeselected"
-      />
-    </OptionGroup>
-    <button id="navigation-button" @click="onNavigate">Continue</button>
+    <div class="mb-10">
+      <OptionGroup title="Output Formats">
+        <BasicOptionComponent v-for="f in formats"
+                              :key="f.key"
+                              :id="f.key"
+                              :label="f.name"
+                              :description="f.description"
+                              :selected="f.selected"
+                              @selected="onFormatSelected"
+                              @deselected="onFormatDeselected"
+        />
+      </OptionGroup>
+    </div>
+    <div class="mb-10">
+      <OptionGroup title="Additional Options">
+        <BasicOptionComponent v-for="o in options"
+                              :key="o.key"
+                              :id="o.key"
+                              :label="o.name"
+                              :description="o.description"
+                              :selected="o.selected"
+                              @selected="onOptionSelected"
+                              @deselected="onOptionDeselected"
+        />
+      </OptionGroup>
+    </div>
+    <div class="flex justify-center">
+      <button class="btn" id="navigation-button" @click="onNavigate">Continue</button>
+    </div>
   </div>
 </template>

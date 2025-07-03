@@ -5,8 +5,8 @@
 </script>
 
 <template>
-  <div>
-    <h2>{{props.title}}</h2>
+  <h2 class="title">{{props.title}}</h2>
+  <div class="flex justify-center">
     <slot/>
   </div>
 </template>

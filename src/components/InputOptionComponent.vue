@@ -32,8 +32,11 @@
 </script>
 
 <template>
-  <div :title="props.description">
-    <label :for="props.id">{{props.label}}</label>
-    <input :id="props.id" type="text" @input=onInput :placeholder="props.placeholder" />
+  <div class="relative group flex items-center p-5" :class="{selected : props.selected}">
+    <label :for="props.id" class="mr-3">{{props.label}}:</label>
+    <input :id="props.id" class="textfield" type="text" @input=onInput :placeholder="props.placeholder" />
+    <div class="description-tooltip">
+      {{ description }}
+    </div>
   </div>
 </template>

@@ -78,17 +78,20 @@
 
 <template>
   <div>
-    <OptionGroup title="WebShell Features">
-      <BasicOptionComponent v-for="f in features"
-                            :key="f.key"
-                            :id="f.key"
-                            :label="f.name"
-                            :description="f.description"
-                            :selected="f.selected"
-                            @selected="onBasicFeatureSelected"
-                            @deselected="onFeatureDeselected"
-      />
-    </OptionGroup>
+    <div class="mb-10">
+      <OptionGroup title="WebShell Features">
+        <BasicOptionComponent v-for="f in features"
+                              :key="f.key"
+                              :id="f.key"
+                              :label="f.name"
+                              :description="f.description"
+                              :selected="f.selected"
+                              @selected="onBasicFeatureSelected"
+                              @deselected="onFeatureDeselected"
+        />
+      </OptionGroup>
+    </div>
+    <div class="mb-10">
     <OptionGroup title="Additional Protections">
       <BasicOptionComponent v-for="p in basicProtections"
                             :key="p.key"
@@ -111,6 +114,9 @@
                             @deselected="onFeatureDeselected"
       />
     </OptionGroup>
-    <button id="navigation-button" @click="onNavigate">Continue</button>
+    </div>
+    <div class="flex justify-center">
+      <button class="btn" id="navigation-button" @click="onNavigate">Continue</button>
+    </div>
   </div>
 </template>

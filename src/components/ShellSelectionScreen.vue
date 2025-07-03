@@ -59,7 +59,6 @@
   };
 </script>
 <template>
-  <div>
   <OptionGroup title="WebShell Technologies">
     <BasicOptionComponent v-for="t in technologies"
                           :key="t.technology"
@@ -71,6 +70,7 @@
                           @deselected="onTechnologyDeselected"
     />
   </OptionGroup>
-  <button id="navigation-button" @click="onNavigate">Continue</button>
+  <div class="mt-10 flex justify-center">
+    <button class="btn" id="navigation-button" @click="onNavigate">Continue</button>
   </div>
 </template>

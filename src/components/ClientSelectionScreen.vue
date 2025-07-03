@@ -25,6 +25,7 @@
       t.selected = false;
       APIResponse.dependencies[t.technology] = t.dependencies;
     });
+    console.log(availableTechnologies);
 
     // Update the technologies array
     technologies.value = availableTechnologies.data;
@@ -66,6 +67,7 @@
 </script>
 <template>
   <div>
+    <div class="mb-10">
     <OptionGroup title="Client Technologies">
       <BasicOptionComponent v-for="t in technologies"
                             :key="t.technology"
@@ -77,6 +79,9 @@
                             @deselected="onTechnologyDeselected"
       />
     </OptionGroup>
-    <button id="navigation-button" @click="onNavigate">Generate</button>
+    </div>
+    <div class="flex justify-center">
+      <button class="btn" id="navigation-button" @click="onNavigate">Generate</button>
+    </div>
   </div>
 </template>
