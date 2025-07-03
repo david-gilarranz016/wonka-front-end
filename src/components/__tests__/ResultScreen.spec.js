@@ -5,6 +5,7 @@ import axios from 'axios';
 import ResultScreen from '../ResultScreen.vue';
 import { GenerationRequest } from '../GenerationRequest.js';
 import { useRouter } from 'vue-router';
+import { APIResponse } from '../APIResponse';
 
 // Mocks required for the tests
 const mockedResponse = {
@@ -32,6 +33,20 @@ vi.mock('vue-router', () => ({
 }));
 
 describe('ResultScreen', () => {
+  beforeEach(() => {
+    // Set a client technology for the generation request
+    GenerationRequest.setClientTechnology('python');
+
+    // Add dependencies for said technology
+    APIResponse.dependencies.python = '/dependencies/requirements.txt';
+  });
+
+  afterEach(() => {
+    // Reset the generation request and the APIResponse object
+    GenerationRequest.reset();
+    APIResponse.dependencies = {};
+  });
+
   it('Sends the GenerationRequest to the backend', async () => {
     await mockAxiosAndCreateWrapper();
 
@@ -80,6 +95,18 @@ describe('ResultScreen', () => {
     const wrapper =  await mockAxiosAndCreateWrapper();
 
     expect(wrapper.findAll('a')[1].attributes('target')).toEqual('_blank');
+  });
+
+  it('If successfull, show client dependencies link', async () => {
+    const wrapper =  await mockAxiosAndCreateWrapper();
+
+    expect(wrapper.findAll('a')[2].attributes('href')).toEqual(`${import.meta.env.VITE_API_BASE}/dependencies/requirements.txt`);
+  });
+
+  it('Opens client dependencies link in new tab', async () => {
+    const wrapper =  await mockAxiosAndCreateWrapper();
+
+    expect(wrapper.findAll('a')[2].attributes('target')).toEqual('_blank');
   });
 
   it('Allows starting over the process', async () => {

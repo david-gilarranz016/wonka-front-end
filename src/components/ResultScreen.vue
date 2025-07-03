@@ -3,6 +3,7 @@
   import axios from 'axios';
   import { useRouter } from 'vue-router';
   import { GenerationRequest } from './GenerationRequest.js';
+  import { APIResponse } from './APIResponse.js';
 
   // State refs
   const success = ref(null);
@@ -12,6 +13,7 @@
   // Computed properties
   const shellUrl = computed(() => `${import.meta.env.VITE_API_BASE}${response.value.shell ? response.value.shell.url : ''}`);
   const clientUrl = computed(() => `${import.meta.env.VITE_API_BASE}${response.value.client ? response.value.client.url : ''}`);
+  const dependenciesUrl = computed(() => `${import.meta.env.VITE_API_BASE}${APIResponse.dependencies[GenerationRequest.request.client]}`);
 
   onMounted(async () => {
     // Send the generation request
@@ -44,6 +46,7 @@
       <ul>
         <li>Checksum: {{ response.client.checksum.value }} ({{ response.client.checksum.algorithm }})</li>
         <li>Download link: <a :href="clientUrl" target="_blank">{{ clientUrl }}</a></li>
+        <li>Dependencies: <a :href="dependenciesUrl" target="_blank">{{ dependenciesUrl }}</a></li>
       </ul>
       <p>
         <b>Note:</b>Installation of dependencies might be necessary for the client to work. If unable to run
