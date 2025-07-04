@@ -58,7 +58,7 @@
         the client, check if any dependencies are missing.
       </p>
     </div>
-    <div v-else="success">
+    <div v-else-if="success === false">
       <p class="border border-red-400 bg-red-800/20 p-5 rounded-lg text-center text-red-400 font-bold">
         An error has occurred
       </p>

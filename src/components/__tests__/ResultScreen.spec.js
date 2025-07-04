@@ -59,6 +59,12 @@ describe('ResultScreen', () => {
     expect(wrapper.text()).toContain('An error has occurred');
   });
 
+  it('Does not show the error message if no error happens', async () => {
+    const wrapper = mount(ResultScreen);
+
+    expect(wrapper.text()).not.toContain('An error has occurred');
+  });
+
   it('If successfull, shows shell checksum', async() => {
     const wrapper =  await mockAxiosAndCreateWrapper();
 
