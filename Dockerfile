@@ -17,5 +17,8 @@ COPY . .
 RUN npm run build
 EXPOSE 8080
 
+# Run the entry point to configure environment variables
+RUN chmod +x entry_point.sh
+
 # Run the app
-CMD [ "http-server", "dist" ]
+CMD ["/app/entry_point.sh"]
