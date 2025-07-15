@@ -33,7 +33,7 @@ docker build -t wonka/front-end .
 variable:
 
 ```bash
-docker run -d -p 8081 -e 'APP_API_BASE=http://localhost:8080' wonka/front-end
+docker run -d -p 8081:8080 -e 'APP_API_BASE=http://localhost:8080/api' wonka/front-end
 ```
 
 ## Instructions for Developers
